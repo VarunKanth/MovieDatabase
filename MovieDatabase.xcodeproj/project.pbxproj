@@ -18,6 +18,10 @@
 		80F188272C54C8020051EA05 /* MovieDatabaseUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F188262C54C8020051EA05 /* MovieDatabaseUITestsLaunchTests.swift */; };
 		80F188352C54C8940051EA05 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F188342C54C8940051EA05 /* Movie.swift */; };
 		80F188372C54D1720051EA05 /* movies.json in Resources */ = {isa = PBXBuildFile; fileRef = 80F188362C54D1720051EA05 /* movies.json */; };
+		80F1883B2C54DE160051EA05 /* MovieTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F188392C54DE160051EA05 /* MovieTableViewCell.swift */; };
+		80F1883C2C54DE160051EA05 /* MovieTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 80F1883A2C54DE160051EA05 /* MovieTableViewCell.xib */; };
+		80F1883F2C54E3980051EA05 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F1883E2C54E3980051EA05 /* Extensions.swift */; };
+		80F188422C54E7320051EA05 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 80F188412C54E7320051EA05 /* SDWebImage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +57,9 @@
 		80F188262C54C8020051EA05 /* MovieDatabaseUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDatabaseUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		80F188342C54C8940051EA05 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		80F188362C54D1720051EA05 /* movies.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = movies.json; sourceTree = "<group>"; };
+		80F188392C54DE160051EA05 /* MovieTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTableViewCell.swift; sourceTree = "<group>"; };
+		80F1883A2C54DE160051EA05 /* MovieTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MovieTableViewCell.xib; sourceTree = "<group>"; };
+		80F1883E2C54E3980051EA05 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80F188422C54E7320051EA05 /* SDWebImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +111,8 @@
 		80F188022C54C7FD0051EA05 /* MovieDatabase */ = {
 			isa = PBXGroup;
 			children = (
+				80F1883D2C54E3810051EA05 /* Helpers */,
+				80F188382C54DD810051EA05 /* Views */,
 				80F188332C54C8740051EA05 /* Models */,
 				80F188032C54C7FD0051EA05 /* AppDelegate.swift */,
 				80F188052C54C7FD0051EA05 /* SceneDelegate.swift */,
@@ -141,6 +151,23 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		80F188382C54DD810051EA05 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				80F188392C54DE160051EA05 /* MovieTableViewCell.swift */,
+				80F1883A2C54DE160051EA05 /* MovieTableViewCell.xib */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		80F1883D2C54E3810051EA05 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				80F1883E2C54E3980051EA05 /* Extensions.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -157,6 +184,9 @@
 			dependencies = (
 			);
 			name = MovieDatabase;
+			packageProductDependencies = (
+				80F188412C54E7320051EA05 /* SDWebImage */,
+			);
 			productName = MovieDatabase;
 			productReference = 80F188002C54C7FD0051EA05 /* MovieDatabase.app */;
 			productType = "com.apple.product-type.application";
@@ -229,6 +259,9 @@
 				Base,
 			);
 			mainGroup = 80F187F72C54C7FD0051EA05;
+			packageReferences = (
+				80F188402C54E7320051EA05 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+			);
 			productRefGroup = 80F188012C54C7FD0051EA05 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -246,6 +279,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				80F1880D2C54C8020051EA05 /* Assets.xcassets in Resources */,
+				80F1883C2C54DE160051EA05 /* MovieTableViewCell.xib in Resources */,
 				80F188102C54C8020051EA05 /* Base in Resources */,
 				80F188372C54D1720051EA05 /* movies.json in Resources */,
 				80F1880B2C54C7FD0051EA05 /* Base in Resources */,
@@ -273,6 +307,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80F1883B2C54DE160051EA05 /* MovieTableViewCell.swift in Sources */,
+				80F1883F2C54E3980051EA05 /* Extensions.swift in Sources */,
 				80F188082C54C7FD0051EA05 /* ViewController.swift in Sources */,
 				80F188042C54C7FD0051EA05 /* AppDelegate.swift in Sources */,
 				80F188352C54C8940051EA05 /* Movie.swift in Sources */,
@@ -617,6 +653,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		80F188402C54E7320051EA05 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.19.5;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		80F188412C54E7320051EA05 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 80F188402C54E7320051EA05 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 80F187F82C54C7FD0051EA05 /* Project object */;
 }

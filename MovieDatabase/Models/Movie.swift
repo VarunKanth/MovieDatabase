@@ -33,7 +33,7 @@ struct Movie: Codable {
     let language: String
     let country: String
     let awards: String
-    let poster: URL
+    let poster: String
     let ratings: [Rating]
     let metascore: String
     let imdbRating: String
