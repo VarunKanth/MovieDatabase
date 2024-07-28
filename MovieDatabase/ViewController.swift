@@ -13,6 +13,9 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var movieList: UITableView!
     
+    @IBOutlet weak var searchMovieBar: UISearchBar!
+    
+    
     let sectionHeaders = ["Year","Genre","Directors","Actors","All Movies"]
     
     var originalMovieList: [Movie] = []
@@ -29,8 +32,14 @@ class ViewController: UIViewController {
     
     var collapsedSections: Set<Int> = []
     
+    var filteredMovies: [Movie] = []
+    
+    var isSearching: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchMovieBar.delegate = self
+        self.navigationItem.title = "Movie Database"
         movieList.delegate = self
         movieList.dataSource = self
         let optionCellNib = UINib(nibName: "OptionTableViewCell", bundle: nil)
@@ -147,22 +156,37 @@ extension ViewController: UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? OptionTableViewCell else { return }
-        cell.isInnerTableViewVisible.toggle()
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        // Animate the changes
-        UIView.animate(withDuration: 0.3) {
-            tableView.beginUpdates()
-            tableView.endUpdates()
+        if indexPath.section == 4 {
+            let movieDetail = originalMovieList[indexPath.row]
+            self.showMovieDetail(movieDetail: movieDetail)
         }
+        else if isSearching {
+            let movieDetail = filteredMovies[indexPath.row]
+            self.showMovieDetail(movieDetail: movieDetail)
+        }
+        else{
+            guard let cell = tableView.cellForRow(at: indexPath) as? OptionTableViewCell else { return }
+            cell.isInnerTableViewVisible.toggle()
+            tableView.deselectRow(at: indexPath, animated: true)
+            
+            // Animate the changes
+            UIView.animate(withDuration: 0.3) {
+                tableView.beginUpdates()
+                tableView.endUpdates()
+            }
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if isSearching {return 0}
         return 44
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if isSearching {
+            return UIView()
+        }
         guard let header = movieList.dequeueReusableHeaderFooterView(withIdentifier: "SectionHeader") as? SectionHeaderView else{
             return UIView()
         }
@@ -181,6 +205,7 @@ extension ViewController: UITableViewDelegate{
 extension ViewController: UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isSearching {return filteredMovies.count}
         if collapsedSections.contains(section) {
             return 0
         }
@@ -200,7 +225,22 @@ extension ViewController: UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+        if isSearching {
+            guard let cell = movieList.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as? MovieTableViewCell else{
+                return UITableViewCell()
+            }
+            let movieDetail = filteredMovies[indexPath.row]
+            if let imageUrl = URL(string: movieDetail.poster){
+                cell.movieThumbnail.sd_imageIndicator = SDWebImageActivityIndicator.gray
+                cell.movieThumbnail.sd_imageIndicator?.startAnimatingIndicator()
+                cell.movieThumbnail.sd_setImage(with: imageUrl, completed: nil)
+            }
+            cell.movieLanguages.text = "Languages: \(movieDetail.language)"
+            cell.movieYear.text = "Year: \(movieDetail.year)"
+            cell.movieTitle.text = movieDetail.title
+            cell.delegateToShowDetail = self
+            return cell
+        }
         switch indexPath.section{
             case 0:
                 guard let cell = movieList.dequeueReusableCell(withIdentifier: "OptionCell", for: indexPath) as? OptionTableViewCell else{return UITableViewCell()}
@@ -209,6 +249,7 @@ extension ViewController: UITableViewDataSource{
                 if let moviesForYear = sortedDictionaryOfMovies["year"]?[yearToDisplay]{
                     cell.movieListForSection = moviesForYear
                 }
+                cell.delegateForTable = self
                 return cell
             case 1:
                 guard let cell = movieList.dequeueReusableCell(withIdentifier: "OptionCell", for: indexPath) as? OptionTableViewCell else{return UITableViewCell()}
@@ -217,6 +258,7 @@ extension ViewController: UITableViewDataSource{
                 if let moviesForGenre = sortedDictionaryOfMovies["genre"]?[genreToDisplay]{
                     cell.movieListForSection = moviesForGenre
                 }
+                cell.delegateForTable = self
                 return cell
             case 2:
                 guard let cell = movieList.dequeueReusableCell(withIdentifier: "OptionCell", for: indexPath) as? OptionTableViewCell else{return UITableViewCell()}
@@ -225,6 +267,7 @@ extension ViewController: UITableViewDataSource{
                 if let moviesForDirectors = sortedDictionaryOfMovies["directors"]?[directorToDisplay]{
                     cell.movieListForSection = moviesForDirectors
                 }
+                cell.delegateForTable = self
                 return cell
             case 3:
                 guard let cell = movieList.dequeueReusableCell(withIdentifier: "OptionCell", for: indexPath) as? OptionTableViewCell else{return UITableViewCell()}
@@ -233,6 +276,7 @@ extension ViewController: UITableViewDataSource{
                 if let moviesForActors = sortedDictionaryOfMovies["actors"]?[actorToDisplay]{
                     cell.movieListForSection = moviesForActors
                 }
+                cell.delegateForTable = self
                 return cell
             case 4:
                 guard let cell = movieList.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as? MovieTableViewCell else{
@@ -247,6 +291,7 @@ extension ViewController: UITableViewDataSource{
                 cell.movieLanguages.text = "Languages: \(movieDetail.language)"
                 cell.movieYear.text = "Year: \(movieDetail.year)"
                 cell.movieTitle.text = movieDetail.title
+                cell.delegateToShowDetail = self
                 return cell
                 
             default:
@@ -256,6 +301,7 @@ extension ViewController: UITableViewDataSource{
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        if isSearching {return 1}
         return sectionHeaders.count
     }
     
@@ -266,3 +312,41 @@ extension ViewController: UITableViewDataSource{
     
 }
 
+
+extension ViewController: SelectMovieDetail{
+    
+    func showMovieDetail(movieDetail: Movie) {
+        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "MovieDetailViewController") { coder in
+            return MovieDetailViewController(coder: coder, movieDetail: movieDetail)
+        }
+
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    
+}
+
+extension ViewController: UISearchBarDelegate{
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // Filter movies based on searchText
+        isSearching = !searchText.isEmpty
+        filteredMovies = originalMovieList.filter { movie in
+                
+            let containsInTitle = movie.title.contains(searchText)
+            let containsInGenre = movie.genre.contains(searchText)
+            let containsInDirector = movie.director.contains(searchText)
+            let containsInActors = movie.actors.contains(searchText)
+            
+            return containsInTitle || containsInGenre || containsInDirector || containsInActors
+        }
+        movieList.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        // Clear search
+        searchBar.text = ""
+        isSearching = false
+        movieList.reloadData()
+    }
+}

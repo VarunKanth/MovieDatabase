@@ -17,6 +17,9 @@ class MovieTableViewCell: UITableViewCell {
     
     @IBOutlet weak var movieYear: UILabel!
     
+    var movieDetail: Movie?
+    
+    var delegateToShowDetail: SelectMovieDetail?
     
     override func awakeFromNib() {
         super.awakeFromNib()

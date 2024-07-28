@@ -8,6 +8,10 @@
 import UIKit
 import SDWebImage
 
+protocol SelectMovieDetail {
+    func showMovieDetail(movieDetail: Movie)
+}
+
 class OptionTableViewCell: UITableViewCell {
 
     @IBOutlet weak var innerTableView: UITableView!
@@ -26,6 +30,8 @@ class OptionTableViewCell: UITableViewCell {
             innerTableView.reloadData()
         }
     }
+    
+    var delegateForTable : SelectMovieDetail?
     
     var isInnerTableViewVisible = false {
         didSet {
@@ -56,6 +62,7 @@ extension OptionTableViewCell: UITableViewDataSource {
         guard let cell = innerTableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as? MovieTableViewCell else{return UITableViewCell()}
         let movieDetail = movieListForSection[indexPath.row]
         cell.movieYear.text = "Year: \(movieDetail.year)"
+        cell.movieDetail = movieDetail
         cell.movieLanguages.text = "Languages: \(movieDetail.language)"
         cell.movieTitle.text = movieDetail.title
         if let imageUrl = URL(string: movieDetail.poster){
@@ -73,6 +80,11 @@ extension OptionTableViewCell: UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 200
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let movieDetail = movieListForSection[indexPath.row]
+        delegateForTable?.showMovieDetail(movieDetail: movieDetail)
     }
 
 }
