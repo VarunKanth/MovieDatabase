@@ -37,7 +37,7 @@ class MovieDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if let urlForImage = URL(string: movieDetail.poster){
-            posterImage.sd_setImage(with: urlForImage)
+            posterImage.sd_setImage(with: urlForImage, placeholderImage: UIImage(named: "video.png"))
         }
         movieTitle.text = movieDetail.title
         plotText.text = movieDetail.plot

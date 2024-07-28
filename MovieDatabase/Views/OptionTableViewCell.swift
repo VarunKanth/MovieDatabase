@@ -45,7 +45,7 @@ class OptionTableViewCell: UITableViewCell {
         innerTableView.delegate = self
         innerTableView.dataSource = self
         innerTableView.separatorColor = .clear
-//        innerTableView.isHidden = true
+        innerTableView.isHidden = true
 //        isInnerTableViewVisible = false
         let movieNib = UINib(nibName: "MovieTableViewCell", bundle: nil)
         innerTableView.register(movieNib, forCellReuseIdentifier: "MovieCell")
@@ -69,7 +69,7 @@ extension OptionTableViewCell: UITableViewDataSource {
             
             cell.movieThumbnail.sd_imageIndicator = SDWebImageActivityIndicator.gray
             cell.movieThumbnail.sd_imageIndicator?.startAnimatingIndicator()
-            cell.movieThumbnail.sd_setImage(with: imageUrl, completed: nil)
+            cell.movieThumbnail.sd_setImage(with: imageUrl, placeholderImage: UIImage(named: "video.png"))
         }
       
         return cell
@@ -83,6 +83,7 @@ extension OptionTableViewCell: UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         let movieDetail = movieListForSection[indexPath.row]
         delegateForTable?.showMovieDetail(movieDetail: movieDetail)
     }

@@ -19,27 +19,31 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fsa-Cn-Eba">
-                    <rect key="frame" x="450.66666666666669" y="20" width="34.333333333333314" height="35"/>
-                    <state key="normal" title="Button"/>
-                    <buttonConfiguration key="configuration" style="plain" title="&gt;">
-                        <color key="baseForegroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </buttonConfiguration>
-                </button>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="angle-arrow-pointing-to-right" translatesAutoresizingMaskIntoConstraints="NO" id="H8l-Dz-Xwr">
+                    <rect key="frame" x="469" y="29.666666666666671" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="XY4-Hp-DHv"/>
+                        <constraint firstAttribute="width" constant="16" id="hr5-aa-703"/>
+                    </constraints>
+                </imageView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="AJ8-oP-OgP" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="EPB-uO-g5G"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="fsa-Cn-Eba" secondAttribute="trailing" constant="16" id="VeN-JB-Cp3"/>
-                <constraint firstItem="fsa-Cn-Eba" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="qTE-qw-UZ3"/>
+                <constraint firstItem="H8l-Dz-Xwr" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" constant="-16" id="NPd-6m-aiJ"/>
+                <constraint firstItem="H8l-Dz-Xwr" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="jiC-A9-G03"/>
                 <constraint firstItem="AJ8-oP-OgP" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="rIx-Rv-Z1D"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="arrowImage" destination="H8l-Dz-Xwr" id="HSO-Jo-jMv"/>
                 <outlet property="headerSectionName" destination="AJ8-oP-OgP" id="8PW-8K-LpE"/>
             </connections>
             <point key="canvasLocation" x="67.938931297709928" y="149.64788732394368"/>
         </view>
     </objects>
+    <resources>
+        <image name="angle-arrow-pointing-to-right" width="32" height="32"/>
+    </resources>
 </document>

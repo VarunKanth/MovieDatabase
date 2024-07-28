@@ -30,7 +30,7 @@ class ViewController: UIViewController {
     
     var sortedDictionaryOfMovies : [String:Dictionary<String,[Movie]>] = [:]
     
-    var collapsedSections: Set<Int> = []
+    var collapsedSections: Set<Int> = [0,1,2,3,4]
     
     var filteredMovies: [Movie] = []
     
@@ -149,13 +149,17 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 4{
+        if isSearching || indexPath.section == 4{
             return 200
         }
-        return 250
+        if let cell = movieList.cellForRow(at: indexPath) as? OptionTableViewCell, cell.isInnerTableViewVisible{
+            return 250
+        }
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 4 {
             let movieDetail = originalMovieList[indexPath.row]
             self.showMovieDetail(movieDetail: movieDetail)
@@ -167,7 +171,6 @@ extension ViewController: UITableViewDelegate{
         else{
             guard let cell = tableView.cellForRow(at: indexPath) as? OptionTableViewCell else { return }
             cell.isInnerTableViewVisible.toggle()
-            tableView.deselectRow(at: indexPath, animated: true)
             
             // Animate the changes
             UIView.animate(withDuration: 0.3) {
@@ -183,6 +186,10 @@ extension ViewController: UITableViewDelegate{
         return 44
     }
     
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 200
+    }
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if isSearching {
             return UIView()
@@ -190,12 +197,15 @@ extension ViewController: UITableViewDelegate{
         guard let header = movieList.dequeueReusableHeaderFooterView(withIdentifier: "SectionHeader") as? SectionHeaderView else{
             return UIView()
         }
-//        header.backgroundColor = .lightGray
+
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleHeaderTap(_:)))
         header.addGestureRecognizer(tapGesture)
         header.tag = section
         header.sectionHeaderName = sectionHeaders[section]
+        if !collapsedSections.contains(section) {
+          header.arrowImage.transform = header.arrowImage.transform.rotated(by: .pi/2)
+        }
 
         return header
     }
@@ -233,7 +243,7 @@ extension ViewController: UITableViewDataSource{
             if let imageUrl = URL(string: movieDetail.poster){
                 cell.movieThumbnail.sd_imageIndicator = SDWebImageActivityIndicator.gray
                 cell.movieThumbnail.sd_imageIndicator?.startAnimatingIndicator()
-                cell.movieThumbnail.sd_setImage(with: imageUrl, completed: nil)
+                cell.movieThumbnail.sd_setImage(with: imageUrl, placeholderImage: UIImage(named: "video.png"))
             }
             cell.movieLanguages.text = "Languages: \(movieDetail.language)"
             cell.movieYear.text = "Year: \(movieDetail.year)"
@@ -286,7 +296,7 @@ extension ViewController: UITableViewDataSource{
                 if let imageUrl = URL(string: movieDetail.poster){
                     cell.movieThumbnail.sd_imageIndicator = SDWebImageActivityIndicator.gray
                     cell.movieThumbnail.sd_imageIndicator?.startAnimatingIndicator()
-                    cell.movieThumbnail.sd_setImage(with: imageUrl, completed: nil)
+                    cell.movieThumbnail.sd_setImage(with: imageUrl, placeholderImage: UIImage(named: "video.png"))
                 }
                 cell.movieLanguages.text = "Languages: \(movieDetail.language)"
                 cell.movieYear.text = "Year: \(movieDetail.year)"

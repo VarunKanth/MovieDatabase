@@ -9,6 +9,9 @@ import UIKit
 
 class SectionHeaderView: UITableViewHeaderFooterView {
 
+    @IBOutlet weak var arrowImage: UIImageView!
+    
+    
     var sectionHeaderName = "" {
         didSet{
             self.headerSectionName.text = sectionHeaderName
