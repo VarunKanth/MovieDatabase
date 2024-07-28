@@ -204,7 +204,9 @@ extension ViewController: UITableViewDelegate{
         header.tag = section
         header.sectionHeaderName = sectionHeaders[section]
         if !collapsedSections.contains(section) {
-          header.arrowImage.transform = header.arrowImage.transform.rotated(by: .pi/2)
+            header.arrowImage.transform = CGAffineTransformMakeRotation(.pi/2)
+        }else{
+            header.arrowImage.transform = CGAffineTransformIdentity
         }
 
         return header
